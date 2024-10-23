@@ -1,3 +1,4 @@
+-- create a database named 
 CREATE TABLE `users` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
