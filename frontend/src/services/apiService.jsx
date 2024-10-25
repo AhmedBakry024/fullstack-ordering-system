@@ -17,6 +17,7 @@ export const loginUser = async (credentials) => {
         const response = await axios.get(`${API_URL}/users/login`, { params: credentials });
         return response.data;
     } catch (error) {
+        console.error("Login error:", error.response || error.message);
         throw new Error(error.response?.data?.message || "Login failed");
     }
 };
