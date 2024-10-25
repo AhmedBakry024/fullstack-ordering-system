@@ -1,34 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react'
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+
+import Login from './components/login.component'
+import SignUp from './components/signup.component'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="App">
+        <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+          <div className="container">
+            <Link className="navbar-brand" to={'/sign-in'}>
+              positronX
+            </Link>
+            <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/sign-in'}>
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/sign-up'}>
+                    Sign up
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+        <div className="auth-wrapper">
+          <div className="auth-inner">
+            <Routes>
+              <Route exact path="/" element={<Login />} />
+              <Route path="/sign-in" element={<Login />} />
+              <Route path="/sign-up" element={<SignUp />} />
+            </Routes>
+          </div>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </Router>
   )
 }
 
