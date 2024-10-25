@@ -16,6 +16,7 @@ CREATE TABLE `orders` (
   `customer_id` int,
   `customer_name` varchar(255),
   `customer_phone` varchar(20),
+  `total_price` float NOT NULL,
   `pickup_location` text NOT NULL,
   `dropoff_location` text NOT NULL,
   `package_details` text NOT NULL,
@@ -24,6 +25,18 @@ CREATE TABLE `orders` (
   `created_at` timestamp DEFAULT (CURRENT_TIMESTAMP)
 );
 
+CREATE TABLE `items` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `order_id` int,
+  `name` varchar(255) NOT NULL,
+  `quantity` int NOT NULL,
+  `weight` float NOT NULL,
+  `price` float NOT NULL,
+  `created_at` timestamp DEFAULT (CURRENT_TIMESTAMP)
+);
+
 ALTER TABLE `orders` ADD FOREIGN KEY (`courier_id`) REFERENCES `users` (`id`);
 
 ALTER TABLE `orders` ADD FOREIGN KEY (`customer_id`) REFERENCES `users` (`id`);
+
+ALTER TABLE `items` ADD FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
