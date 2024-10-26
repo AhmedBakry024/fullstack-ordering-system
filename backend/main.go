@@ -7,6 +7,8 @@ import (
     "gorm.io/driver/mysql"
     "gorm.io/gorm"
     "ordering-system/routes"
+    "github.com/gin-gonic/gin"
+    "github.com/gin-contrib/cors"
 )
 
 func main() {
@@ -21,6 +23,17 @@ func main() {
         log.Fatal(err)
     }
 
-    r := routes.SetupRouter(db)
+    r := gin.Default()
+
+    r.Use(cors.New(cors.Config{
+        AllowAllOrigins:  true,
+        AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+        ExposeHeaders:    []string{"Content-Length"},
+        AllowCredentials: true,
+    }))
+
+    routes.SetupRouter(r, db)
+
     r.Run()
 }
