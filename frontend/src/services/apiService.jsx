@@ -4,7 +4,7 @@ const API_URL = "http://localhost:8080"; // backend URL
 
 export const registerUser = async (userData) => {
     try {
-        const response = await axios.post(`${API_URL}/users`, userData);
+        const response = await axios.post('http://localhost:8080/users', userData);
         return response.data;
     } catch (error) {
         console.error("Registration error:", error.response || error.message);
