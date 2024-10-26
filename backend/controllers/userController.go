@@ -42,17 +42,14 @@ func (ctrl *UserController) LoginUser(c *gin.Context) {
         return
     }
 
-    // Check if user exists in the database
     user, err := ctrl.service.GetUserByEmail(email)
     if err != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
         return
     }
 
-    // Hash the provided password
     hashedPassword := hashPassword(password)
 
-    // Check if the password is correct
     if user.Password != hashedPassword {
         c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid password"})
         return
@@ -68,7 +65,6 @@ func (ctrl *UserController) CreateUser(c *gin.Context) {
         return
     }
 
-    // Hash the user's password before storing it
     user.Password = hashPassword(user.Password)
 
     if err := ctrl.service.CreateUser(&user); err != nil {
@@ -79,7 +75,6 @@ func (ctrl *UserController) CreateUser(c *gin.Context) {
     c.JSON(http.StatusCreated, user)
 }
 
-// hashPassword hashes a password using SHA-256
 func hashPassword(password string) string {
     hash := sha256.New()
     hash.Write([]byte(password))

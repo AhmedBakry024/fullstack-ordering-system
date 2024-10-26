@@ -23,19 +23,16 @@ func main() {
         log.Fatal(err)
     }
 
-    // Initialize the Gin engine
     r := gin.Default()
 
-    // Apply CORS configuration before setting up routes
     r.Use(cors.New(cors.Config{
-        AllowOrigins:     []string{"http://localhost:5173"}, // Frontend origin
+        AllowAllOrigins:  true,
         AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
         AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
         ExposeHeaders:    []string{"Content-Length"},
         AllowCredentials: true,
     }))
 
-    // Set up routes
     routes.SetupRouter(r, db)
 
     r.Run()
