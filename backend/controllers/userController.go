@@ -8,6 +8,7 @@ import (
     "github.com/gin-gonic/gin"
     "ordering-system/models"
     "ordering-system/services"
+    "github.com/badoux/checkmail"
 )
 
 type UserController struct {
@@ -42,6 +43,11 @@ func (ctrl *UserController) LoginUser(c *gin.Context) {
         return
     }
 
+    if !isEmailValid(email) {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email address"})
+        return
+    }
+
     user, err := ctrl.service.GetUserByEmail(email)
     if err != nil {
         c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
@@ -65,6 +71,12 @@ func (ctrl *UserController) CreateUser(c *gin.Context) {
         return
     }
 
+    // check if the email is matching the email pattern
+    if !isEmailValid(user.Email) {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email address"})
+        return
+    }
+
     user.Password = hashPassword(user.Password)
 
     if err := ctrl.service.CreateUser(&user); err != nil {
@@ -79,4 +91,12 @@ func hashPassword(password string) string {
     hash := sha256.New()
     hash.Write([]byte(password))
     return hex.EncodeToString(hash.Sum(nil))
+}
+
+func isEmailValid(email string) bool {
+    // This is a very simple email validation using the checkmail package
+
+    checkmail := checkmail.ValidateFormat(email)
+    return checkmail == nil
+     
 }
