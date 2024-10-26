@@ -17,7 +17,9 @@ const Register = () => {
             await registerUser({ name, email, phone, password, role });
             alert('Registration successful');
         } catch (error) {
+            console.error(error);
             alert(error.message);
+
         }
     };
 

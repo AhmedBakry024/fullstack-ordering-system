@@ -7,6 +7,8 @@ import (
     "gorm.io/driver/mysql"
     "gorm.io/gorm"
     "ordering-system/routes"
+    "github.com/gin-contrib/cors"
+    // "github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -22,5 +24,15 @@ func main() {
     }
 
     r := routes.SetupRouter(db)
+
+    // CORS configuration
+    r.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:5173"}, // Frontend origin
+        AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+        ExposeHeaders:    []string{"Content-Length"},
+        AllowCredentials: true,
+    }))
+
     r.Run()
 }
