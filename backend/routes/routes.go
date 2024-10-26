@@ -8,9 +8,7 @@ import (
     "ordering-system/services"
 )
 
-func SetupRouter(db *gorm.DB) *gin.Engine {
-    r := gin.Default()
-
+func SetupRouter(r *gin.Engine, db *gorm.DB) {
     userRepo := repositories.NewUserRepository(db)
     userService := services.NewUserService(userRepo)
     userController := controllers.NewUserController(userService)
@@ -19,13 +17,10 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
     orderService := services.NewOrderService(orderRepo)
     orderController := controllers.NewOrderController(orderService)
 
+    // Define routes
     r.GET("/users/:id", userController.GetUserByID)
     r.POST("/users", userController.CreateUser)
-	// r.GET("/ping", controllers.PingAdmin)
     r.GET("/users/login", userController.LoginUser)
-
-    // add the routes for the other controllers
-    // ...
 
     r.POST("/order/create", orderController.CreateOrder)
     r.GET("/order/:id", orderController.GetOrderByID)
@@ -34,8 +29,4 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
     r.GET("/order/customer/:id", orderController.GetAllOrdersByCustomerID)
     r.GET("/order/courier/:id", orderController.GetAllOrdersByCourierID)
     r.GET("/order/all", orderController.GetAllOrders)
-
-    
-
-    return r
 }
