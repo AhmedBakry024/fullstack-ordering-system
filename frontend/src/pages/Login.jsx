@@ -1,3 +1,4 @@
+// src/pages/Login.js
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { loginUser } from '../services/apiService';
@@ -12,7 +13,7 @@ const Login = () => {
         e.preventDefault();
         try {
             const user = await loginUser({ email, password });
-            login(user);
+            login(user); // Store user info, including role, in context
             alert('Login successful');
         } catch (error) {
             alert(error.message);

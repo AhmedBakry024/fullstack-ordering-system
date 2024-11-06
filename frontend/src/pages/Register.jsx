@@ -1,4 +1,3 @@
-// src/pages/Register.js
 import React, { useState } from 'react';
 import { registerUser } from '../services/apiService';
 import InputField from '../components/InputField';

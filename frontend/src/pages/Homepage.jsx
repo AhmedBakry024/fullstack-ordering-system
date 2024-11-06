@@ -1,16 +1,24 @@
-// I want to display two buttons on the homepage, one for the user to sign in and one for the user to sign up.
-// I want to display the user's name and email if they are logged in.
-// I want to display a message if the user is not logged in.
-// I want to display a message if the user is signed up successfully.
-
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { AuthContext } from '../context/AuthContext';
 
 const Homepage = () => {
     const navigate = useNavigate();
+    const { user, logout } = useContext(AuthContext);
     const [message, setMessage] = useState('');
-    const [user, setUser] = useState(null);
+
+    // Use effect to redirect based on user role after login
+    useEffect(() => {
+        if (user) {
+            if (user.role === 'admin') {
+                navigate('/manage-orders');
+            } else if (user.role === 'courier') {
+                navigate('/assigned-orders');
+            } else if (user.role === 'customer') {
+                navigate('/my-orders');
+            }
+        }
+    }, [user, navigate]);
 
     const handleLogin = () => {
         navigate('/login');
@@ -21,15 +29,15 @@ const Homepage = () => {
     };
 
     const handleLogout = () => {
-        setUser(null);
+        logout();
+        setMessage('You have logged out successfully');
     };
 
     return (
         <div>
             {user ? (
                 <div>
-                    <p>Name: {user.name}</p>
-                    <p>Email: {user.email}</p>
+                    <p>Welcome, {user.name} ({user.role})</p>
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
@@ -41,6 +49,6 @@ const Homepage = () => {
             )}
         </div>
     );
-}
+};
 
 export default Homepage;

@@ -13,6 +13,7 @@ type OrderRepository interface {
     GetAllByCustomerID(customerID uint) ([]models.Order, error)
     GetAllByCourierID(courierID uint) ([]models.Order, error)
     GetAll() ([]models.Order, error)
+    AssignToCourier(orderID, courierID uint) error
 }
 
 type orderRepository struct {
@@ -65,4 +66,8 @@ func (r *orderRepository) GetAll() ([]models.Order, error) {
         return nil, err
     }
     return orders, nil
+}
+
+func (r *orderRepository) AssignToCourier(orderID, courierID uint) error {
+    return r.db.Model(&models.Order{}).Where("id = ?", orderID).Update("courier_id", courierID).Error
 }

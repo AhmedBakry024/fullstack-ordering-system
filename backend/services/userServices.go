@@ -9,6 +9,7 @@ type UserService interface {
     GetUserByID(id uint) (*models.User, error)
     CreateUser(user *models.User) error
     GetUserByEmail(email string) (*models.User, error)
+    
 }
 
 type userService struct {

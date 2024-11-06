@@ -80,3 +80,12 @@ func hashPassword(password string) string {
     hash.Write([]byte(password))
     return hex.EncodeToString(hash.Sum(nil))
 }
+
+// checkRole that take a user id and target role and return true if the user has the role
+func (ctrl *UserController) checkRole(userID uint, role string) bool {
+    user, err := ctrl.service.GetUserByID(userID)
+    if err != nil {
+        return false
+    }
+    return user.Role == role
+}
