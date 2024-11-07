@@ -37,7 +37,7 @@ fullstack-ordering-system/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/fullstack-ordering-system.git
+git clone https://github.com/ahmedbakry024/fullstack-ordering-system.git
 cd fullstack-ordering-system
 ```
 
