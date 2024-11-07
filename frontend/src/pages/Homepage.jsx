@@ -1,54 +1,30 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
+import AdminDashboard from '../pages/AdminDashboard';
+import CourierDashboard from '../pages/CourierDashboard';
+import CustomerDashboard from '../pages/CustomerDashboard';
 
-const Homepage = () => {
-    const navigate = useNavigate();
-    const { user, logout } = useContext(AuthContext);
-    const [message, setMessage] = useState('');
+const HomePage = () => {
+  const { user } = useAuth();
 
-    // Use effect to redirect based on user role after login
-    useEffect(() => {
-        if (user) {
-            if (user.role === 'admin') {
-                navigate('/manage-orders');
-            } else if (user.role === 'courier') {
-                navigate('/assigned-orders');
-            } else if (user.role === 'customer') {
-                navigate('/my-orders');
-            }
-        }
-    }, [user, navigate]);
+  const renderDashboard = () => {
+    switch (user?.role) {
+      case 'customer':
+        return <CustomerDashboard />;
+      case 'courier':
+        return <CourierDashboard />;
+      case 'admin':
+        return <AdminDashboard />;
+      default:
+        return <div>Please log in to continue</div>;
+    }
+  };
 
-    const handleLogin = () => {
-        navigate('/login');
-    };
-
-    const handleRegister = () => {
-        navigate('/register');
-    };
-
-    const handleLogout = () => {
-        logout();
-        setMessage('You have logged out successfully');
-    };
-
-    return (
-        <div>
-            {user ? (
-                <div>
-                    <p>Welcome, {user.name} ({user.role})</p>
-                    <button onClick={handleLogout}>Logout</button>
-                </div>
-            ) : (
-                <div>
-                    <p>{message}</p>
-                    <button onClick={handleLogin}>Login</button>
-                    <button onClick={handleRegister}>Register</button>
-                </div>
-            )}
-        </div>
-    );
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-6">Welcome {user?.name}</h1>
+      {renderDashboard()}
+    </div>
+  );
 };
 
-export default Homepage;
+export default HomePage;

@@ -1,4 +1,6 @@
+// src/pages/Register.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../services/apiService';
 import InputField from '../components/InputField';
 import '../styles/Register.css';
@@ -9,16 +11,17 @@ const Register = () => {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('customer'); // Default role set to 'customer'
+    const navigate = useNavigate(); // Initialize navigate hook
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await registerUser({ name, email, phone, password, role });
             alert('Registration successful');
+            navigate('/'); // Redirect to HomePage
         } catch (error) {
             console.error(error);
             alert(error.message);
-
         }
     };
 

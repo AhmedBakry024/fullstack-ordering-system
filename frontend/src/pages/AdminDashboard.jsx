@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../services/apiService';
 
-const ManageOrders = () => {
+const AdminDashboard = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -9,10 +9,10 @@ const ManageOrders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const fetchedOrders = await getAllOrders();
-                setOrders(fetchedOrders);
+                const data = await getAllOrders();
+                setOrders(data);
             } catch (err) {
-                setError("Failed to fetch orders. Please try again later.");
+                setError('Failed to fetch all orders.');
             } finally {
                 setLoading(false);
             }
@@ -24,9 +24,12 @@ const ManageOrders = () => {
     const handleStatusUpdate = async (orderId, newStatus) => {
         try {
             await updateOrderStatus(orderId, newStatus);
-            setOrders(orders.map(order => order.id === orderId ? { ...order, status: newStatus } : order));
+            setOrders(orders.map(order => 
+                order.id === orderId ? { ...order, status: newStatus } : order
+            ));
+            alert(`Order #${orderId} updated to ${newStatus}`);
         } catch (err) {
-            alert("Failed to update order status.");
+            alert('Failed to update order status.');
         }
     };
 
@@ -34,18 +37,18 @@ const ManageOrders = () => {
         try {
             await deleteOrder(orderId);
             setOrders(orders.filter(order => order.id !== orderId));
-            alert(`Order ${orderId} deleted successfully.`);
+            alert(`Order #${orderId} deleted successfully.`);
         } catch (err) {
-            alert("Failed to delete order.");
+            alert('Failed to delete order.');
         }
     };
 
-    if (loading) return <p>Loading orders...</p>;
+    if (loading) return <p>Loading all orders...</p>;
     if (error) return <p>{error}</p>;
 
     return (
         <div>
-            <h2>Manage Orders</h2>
+            <h2>All Orders</h2>
             <table>
                 <thead>
                     <tr>
@@ -59,7 +62,7 @@ const ManageOrders = () => {
                     {orders.map(order => (
                         <tr key={order.id}>
                             <td>{order.id}</td>
-                            <td>{order.customerName || "N/A"}</td>
+                            <td>{order.customerName || 'N/A'}</td>
                             <td>{order.status}</td>
                             <td>
                                 <select
@@ -81,4 +84,4 @@ const ManageOrders = () => {
     );
 };
 
-export default ManageOrders;
+export default AdminDashboard;
