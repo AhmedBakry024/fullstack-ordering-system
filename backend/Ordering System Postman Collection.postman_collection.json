@@ -461,22 +461,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/order/4",
+							"raw": "http://localhost:8080/order?orderID=5",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"order",
-								"4"
+								"order"
 							],
 							"query": [
 								{
-									"key": "access_key",
-									"value": "{{accessKey}}",
-									"description": "Optional. A collection's read-only access key. Using this query parameter does not require an API key to call the endpoint.",
-									"disabled": true
+									"key": "orderID",
+									"value": "5"
 								}
 							]
 						},
@@ -632,7 +629,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/order/delete?orderID=4&userID=30&courierID=31",
+							"raw": "http://localhost:8080/order/delete?orderID=5&userID=30&courierID=31",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -645,7 +642,7 @@
 							"query": [
 								{
 									"key": "orderID",
-									"value": "4"
+									"value": "5"
 								},
 								{
 									"key": "userID",
@@ -795,7 +792,7 @@
 							"raw": "{\n  \"status\": \"in_transit\"\n}\n"
 						},
 						"url": {
-							"raw": "http://localhost:8080/order/update?orderID=4&userID=31&status=accepted",
+							"raw": "http://localhost:8080/order/update?orderID=5&userID=31&status=accepted",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -808,7 +805,7 @@
 							"query": [
 								{
 									"key": "orderID",
-									"value": "4"
+									"value": "5"
 								},
 								{
 									"key": "userID",
@@ -1340,7 +1337,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/order/assign?courierID=31&userID=32&orderID=4",
+							"raw": "http://localhost:8080/order/assign?courierID=31&userID=32&orderID=5",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1361,7 +1358,7 @@
 								},
 								{
 									"key": "orderID",
-									"value": "4"
+									"value": "5"
 								}
 							]
 						}
