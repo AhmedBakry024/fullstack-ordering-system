@@ -1,31 +1,27 @@
-import React, { useState, useContext } from "react";
-import { registerUser } from "../services/apiService";
-import InputField from "../components/InputField";
-import Navbar from "../components/Navbar";
-import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+// src/pages/Register.js
+import React, { useState } from 'react';
+import { registerUser } from '../services/apiService';
+import InputField from '../components/InputField';
+import '../styles/Register.css';
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("customer");
-  const { login } = useContext(AuthContext);
-    const navigate = useNavigate();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('customer'); // Default role set to 'customer'
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await registerUser({ name, email, phone, password, role });
-      alert("Registration successful");
-      login({ name, email, phone, role });
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await registerUser({ name, email, phone, password, role });
+            alert('Registration successful');
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+
+        }
+    };
 
   return (
     <div className="bg-gray-900 h-screen">

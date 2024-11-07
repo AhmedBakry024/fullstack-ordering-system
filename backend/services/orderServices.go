@@ -13,6 +13,7 @@ type OrderService interface {
 	GetAllOrdersByCustomerID(customerID uint) ([]models.Order, error)
 	GetAllOrdersByCourierID(courierID uint) ([]models.Order, error)
 	GetAllOrders() ([]models.Order, error)
+	AssignOrderToCourier(orderID, courierID uint, assignerId uint) error
 }
 
 type orderService struct {
@@ -49,4 +50,8 @@ func (s *orderService) GetAllOrdersByCourierID(courierID uint) ([]models.Order, 
 
 func (s *orderService) GetAllOrders() ([]models.Order, error) {
 	return s.repo.GetAll()
+}
+
+func (s *orderService) AssignOrderToCourier(orderID, courierID uint, assignerId uint) error {
+	return s.repo.AssignToCourier(orderID, courierID)
 }
