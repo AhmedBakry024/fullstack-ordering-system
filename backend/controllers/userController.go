@@ -92,3 +92,11 @@ func hashPassword(password string) string {
     hash.Write([]byte(password))
     return hex.EncodeToString(hash.Sum(nil))
 }
+
+func isEmailValid(email string) bool {
+    // This is a very simple email validation using the checkmail package
+
+    checkmail := checkmail.ValidateFormat(email)
+    return checkmail == nil
+     
+}

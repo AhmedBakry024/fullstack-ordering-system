@@ -32,7 +32,7 @@ func NewOrderController(orderService services.OrderService, userService services
 
 
 func (ctrl *OrderController) GetOrderByID(c *gin.Context) {
-	orderID, ordererr := strconv.Atoi(c.Param("orderID"))
+	orderID, ordererr := strconv.Atoi(c.Query("orderID"))
 	if ordererr != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid order ID"})
 		return

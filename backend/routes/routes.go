@@ -26,7 +26,7 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 	// admin := r.Group("/admin")
 
 	r.POST("/order/create", orderController.CreateOrder)
-	r.GET("/order/:id", orderController.GetOrderByID)
+	r.GET("/order", orderController.GetOrderByID)
 	r.DELETE("/order/delete", orderController.DeleteOrder)
 	r.PUT("/order/update", orderController.UpdateOrderStatus)
 	r.GET("/order/customer", orderController.GetAllOrdersByCustomerID)
