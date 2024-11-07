@@ -6,7 +6,10 @@ import (
 
 type Item struct {
 	gorm.Model
-	Name  string
-	Price float64
-	
+	ID       uint
+	Name     string
+	Price    float64
+	Quantity int
+	Weight   float64
+	OrderID  uint
 }

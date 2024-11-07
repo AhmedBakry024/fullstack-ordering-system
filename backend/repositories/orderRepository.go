@@ -71,3 +71,4 @@ func (r *orderRepository) GetAll() ([]models.Order, error) {
 func (r *orderRepository) AssignToCourier(orderID, courierID uint) error {
     return r.db.Model(&models.Order{}).Where("id = ?", orderID).Update("courier_id", courierID).Error
 }
+

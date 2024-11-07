@@ -2,7 +2,7 @@ package models
 
 import (
     "time"
-    "gorm.io/gorm"
+    // "gorm.io/gorm"
 )
 
 type Order struct {
@@ -18,6 +18,5 @@ type Order struct {
     DeliveryTime   time.Time      `json:"delivery_time" gorm:"default:CURRENT_DATE + INTERVAL 2 DAY"`
     Status         string         `json:"status" gorm:"size:20;default:'pending'"`
     CreatedAt      time.Time      `json:"created_at" gorm:"default:CURRENT_TIMESTAMP"`
-    UpdatedAt      time.Time      `json:"updated_at" gorm:"autoUpdateTime"`
-    DeletedAt      gorm.DeletedAt `json:"deleted_at" gorm:"index"`
+    OrderItems     []Item         `json:"order_items" gorm:"foreignKey:OrderID"`
 }

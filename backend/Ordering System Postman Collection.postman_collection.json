@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "01f4e6d3-08b5-4ade-8306-64bff604e93c",
+		"_postman_id": "87b3d119-96ad-43f1-ba03-f98b0abe6bdf",
 		"name": "Ordering System Postman Collection",
 		"description": "# 📄 Get started here\n\nThis template contains a boilerplate for documentation that you can quickly customize and reuse.\n\n## 🔖 How to use this template\n\n- Replace the content given brackets (()) with your API's details.\n- Tips are formatted in `codespan` - feel free to read and remove them.\n    \n\n---\n\n`Start with a brief overview of what your API offers.`\n\nThe ((product name)) provides many API products, tools, and resources that enable you to ((add product value here)).\n\n`You can also list the APIs you offer, link to the relevant pages, or do both in this section.`\n\n## **Getting started guide**\n\n`List the steps or points required to start using your APIs. Make sure to cover everything required to reach success with your API as quickly as possible.`\n\nTo start using the ((add APIs here)), you need to -\n\n`The points given below are from The Postman API's documentation. You can reference it to write your own getting started guide.`\n\n- You must use a valid API Key to send requests to the API endpoints. You can get your API key from Postman's [integrations dashboard](https://go.postman.co/settings/me/api-keys).\n- The API has [rate and usage limits](https://learning.postman.com/docs/developer/postman-api/postman-api-rate-limits/).\n- The API only responds to HTTPS-secured communications. Any requests sent via HTTP return an HTTP 301 redirect to the corresponding HTTPS resources.\n- The API returns request responses in JSON format. When an API request returns an error, it is sent in the JSON response as an error key.\n    \n\n## Authentication\n\n`Add details on the authorization keys/tokens required, steps that cover how to get them, and the relevant error codes.`\n\nThe ((product name)) API uses ((add your API's authorization type)) for authentication.\n\n`The details given below are from the Postman API's documentation. You can reference it to write your own authentication section.`\n\nPostman uses API keys for authentication. You can generate a Postman API key in the [API keys](https://postman.postman.co/settings/me/api-keys) section of your Postman account settings.\n\nYou must include an API key in each request to the Postman API with the X-Api-Key request header.\n\n### Authentication error response\n\nIf an API key is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.\n\n## Rate and usage limits\n\n`Use this section to cover your APIs' terms of use. Include API limits, constraints, and relevant error codes, so consumers understand the permitted API usage and practices.`\n\n`The example given below is from The Postman API's documentation. Use it as a reference to write your APIs' terms of use.`\n\nAPI access rate limits apply at a per-API key basis in unit time. The limit is 300 requests per minute. Also, depending on your plan, you may have usage limits. If you exceed either limit, your request will return an HTTP 429 Too Many Requests status code.\n\nEach API response returns the following set of headers to help you identify your use status:\n\n| Header | Description |\n| --- | --- |\n| `X-RateLimit-Limit` | The maximum number of requests that the consumer is permitted to make per minute. |\n| `X-RateLimit-Remaining` | The number of requests remaining in the current rate limit window. |\n| `X-RateLimit-Reset` | The time at which the current rate limit window resets in UTC epoch seconds. |\n\n### 503 response\n\nAn HTTP `503` response from our servers indicates there is an unexpected spike in API access traffic. The server is usually operational within the next five minutes. If the outage persists or you receive any other form of an HTTP `5XX` error, [contact support](https://support.postman.com/hc/en-us/requests/new/).\n\n### **Need some help?**\n\n`Add links that customers can refer to whenever they need help.`\n\nIn case you have questions, go through our tutorials ((link to your video or help documentation here)). Or visit our FAQ page ((link to the relevant page)).\n\nOr you can check out our community forum, there’s a good chance our community has an answer for you. Visit our developer forum ((link to developer forum)) to review topics, ask questions, and learn from others.\n\n`You can also document or add links to libraries, code examples, and other resources needed to make a request.`",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "31977867"
+		"_exporter_id": "31551533"
 	},
 	"item": [
 		{
@@ -121,11 +121,8 @@
 				},
 				{
 					"name": "Create User",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -151,12 +148,12 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Login",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/users/login?email=hagag1725@gmail.com&password=12345678",
+							"raw": "http://localhost:8080/users/login?email=jane.doe@example.com&password=securepassword",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -169,11 +166,11 @@
 							"query": [
 								{
 									"key": "email",
-									"value": "hagag1725@gmail.com"
+									"value": "jane.doe@example.com"
 								},
 								{
 									"key": "password",
-									"value": "12345678"
+									"value": "securepassword"
 								}
 							]
 						}
@@ -208,10 +205,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"collection\": {\n        \"info\": {\n            \"name\": \"{{collectionName}}\",\n            \"schema\": \"{{collectionSchemaUrl}}\"\n        },\n        \"item\": [\n            {\n                \"request\": {}\n            }\n        ]\n    }\n}"
-						},
 						"url": {
 							"raw": "http://localhost:8080/orders/customer/:customer_id",
 							"protocol": "http",
@@ -483,15 +476,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/orders/:id",
+							"raw": "http://localhost:8080/order/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"orders",
-								":id"
+								"order",
+								"4"
 							],
 							"query": [
 								{
@@ -499,12 +492,6 @@
 									"value": "{{accessKey}}",
 									"description": "Optional. A collection's read-only access key. Using this query parameter does not require an API key to call the endpoint.",
 									"disabled": true
-								}
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
 								}
 							]
 						},
@@ -803,7 +790,7 @@
 						}
 					],
 					"request": {
-						"method": "PATCH",
+						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -815,21 +802,28 @@
 							"raw": "{\n  \"status\": \"in_transit\"\n}\n"
 						},
 						"url": {
-							"raw": "http://localhost:8080/orders/:id/status",
+							"raw": "http://localhost:8080/order/update?orderID=4&userID=31&status=accepted",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"orders",
-								":id",
-								"status"
+								"order",
+								"update"
 							],
-							"variable": [
+							"query": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "orderID",
+									"value": "4"
+								},
+								{
+									"key": "userID",
+									"value": "31"
+								},
+								{
+									"key": "status",
+									"value": "accepted"
 								}
 							]
 						},
@@ -1155,7 +1149,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"courier_id\": 1,\r\n  \"customer_id\": 1,\r\n  \"customer_name\": \"John Doe\",\r\n  \"customer_phone\": \"1234567890\",\r\n  \"total_price\": 50.0,\r\n  \"pickup_location\": \"Location A\",\r\n  \"dropoff_location\": \"Location B\",\r\n  \"package_details\": \"Small box\"\r\n}\r\n",
+							"raw": "{\r\n  \"courier_id\": 31,\r\n  \"customer_id\": 30,\r\n  \"customer_name\": \"John Doe\",\r\n  \"customer_phone\": \"1234567890\",\r\n  \"total_price\": 50.0,\r\n  \"pickup_location\": \"Location A\",\r\n  \"dropoff_location\": \"Location B\",\r\n  \"package_details\": \"Small box\",\r\n  \"OrderItems\":[\r\n    {\r\n        \"name\": \"Item 1\",\r\n        \"price\": 35.0,\r\n        \"quantity\": 3,\r\n        \"weight\":250.5\r\n    }\r\n  ]\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1163,14 +1157,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/orders",
+							"raw": "http://localhost:8080/order/create",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"orders"
+								"order",
+								"create"
 							],
 							"query": [
 								{
