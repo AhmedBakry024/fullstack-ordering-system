@@ -87,7 +87,8 @@ func (ctrl *OrderController) CreateOrder(c *gin.Context) {
 }
 
 func (ctrl *OrderController) DeleteOrder(c *gin.Context) {
-	orderID, ordererr := strconv.ParseUint(c.Param("orderID"), 10, 32)
+	orderID, ordererr := strconv.ParseUint(c.Query("orderID"), 10, 32)
+    userID, userErr := strconv.ParseUint(c.Query("userID"), 10, 32)
 	if ordererr != nil {
 		c.JSON(http.StatusBadRequest, Response{
 			Status:  "error",
@@ -97,8 +98,29 @@ func (ctrl *OrderController) DeleteOrder(c *gin.Context) {
 		return
 	}
 
+    if userErr != nil {
+        c.JSON(http.StatusBadRequest, Response{
+            Status:  "error",
+            Message: "Invalid user ID",
+            Error:   userErr.Error(),
+        })
+        return
+    }
+
+    // get the user by the user ID and check if the user is an admin
+    user, userErr := ctrl.userService.GetUserByID(uint(userID))
+    if userErr != nil {
+        c.JSON(http.StatusNotFound, Response{
+            Status:  "error",
+            Message: "User not found",
+            Error:   userErr.Error(),
+        })
+        return
+    }
+
 	// Check if order exists
-	if _, ordererr := ctrl.orderService.GetOrderByID(uint(orderID)); ordererr != nil {
+	order, ordererr := ctrl.orderService.GetOrderByID(uint(orderID))
+    if ordererr != nil {
 		c.JSON(http.StatusNotFound, Response{
 			Status:  "error",
 			Message: "Order not found",
@@ -106,6 +128,15 @@ func (ctrl *OrderController) DeleteOrder(c *gin.Context) {
 		})
 		return
 	}
+
+    if user.Role != "admin" && order.CustomerID != user.ID {
+        c.JSON(http.StatusUnauthorized, Response{
+            Status:  "error",
+            Message: "Unauthorized",
+            Error:   "Only admins and the customer who created the order can delete the order",
+        })
+        return
+    }
 
 	if ordererr := ctrl.orderService.DeleteOrder(uint(orderID)); ordererr != nil {
 		log.Printf("Error deleting order: %v", ordererr)
@@ -125,15 +156,15 @@ func (ctrl *OrderController) DeleteOrder(c *gin.Context) {
 
 func (ctrl *OrderController) UpdateOrderStatus(c *gin.Context) {
 
-	orderID, orderErr := strconv.ParseUint(c.Query("orderID"), 10, 32)
+	orderID, err := strconv.ParseUint(c.Query("orderID"), 10, 32)
 	userID, userErr := strconv.ParseUint(c.Query("userID"), 10, 32)
 	newStatus := c.Query("status")
 
-	if orderErr != nil {
+	if err != nil {
 		c.JSON(http.StatusBadRequest, Response{
 			Status:  "error",
 			Message: "Invalid order ID",
-			Error:   orderErr.Error(),
+			Error:   err.Error(),
 		})
 		return
 	}
@@ -169,12 +200,12 @@ func (ctrl *OrderController) UpdateOrderStatus(c *gin.Context) {
 
     
 
-	order, orderErr := ctrl.orderService.GetOrderByID(uint(orderID))
-	if orderErr != nil {
+	order, err := ctrl.orderService.GetOrderByID(uint(orderID))
+	if err != nil {
 		c.JSON(http.StatusNotFound, Response{
 			Status:  "error",
 			Message: "Order not found",
-			Error:   orderErr.Error(),
+			Error:   err.Error(),
 		})
 		return
 	}
@@ -233,11 +264,30 @@ func isValidStatusTransition(current, new string) bool {
 	return false
 }
 func (ctrl *OrderController) GetAllOrdersByCustomerID(c *gin.Context) {
-	customerID, ordererr := strconv.Atoi(c.Param("customer_id"))
+	customerID, ordererr := strconv.Atoi(c.Query("customerID"))
 	if ordererr != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid customer ID"})
 		return
 	}
+
+    user, userErr := ctrl.userService.GetUserByID(uint(customerID))
+    if userErr != nil {
+        c.JSON(http.StatusNotFound, Response{
+            Status:  "error",
+            Message: "User not found",
+            Error:   userErr.Error(),
+        })
+        return
+    }
+
+    if user.Role != "customer" {
+        c.JSON(http.StatusUnauthorized, Response{
+            Status:  "error",
+            Message: "Unauthorized",
+            Error:   "Only The customer can view their orders",
+        })
+        return
+    }
 
 	orders, ordererr := ctrl.orderService.GetAllOrdersByCustomerID(uint(customerID))
 	if ordererr != nil {
@@ -249,11 +299,30 @@ func (ctrl *OrderController) GetAllOrdersByCustomerID(c *gin.Context) {
 }
 
 func (ctrl *OrderController) GetAllOrdersByCourierID(c *gin.Context) {
-	courierID, ordererr := strconv.Atoi(c.Param("courier_id"))
+	courierID, ordererr := strconv.Atoi(c.Query("courierID"))
 	if ordererr != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid courier ID"})
 		return
 	}
+
+    user, userErr := ctrl.userService.GetUserByID(uint(courierID))
+    if userErr != nil {
+        c.JSON(http.StatusNotFound, Response{
+            Status:  "error",
+            Message: "User not found",
+            Error:   userErr.Error(),
+        })
+        return
+    }
+
+    if user.Role != "courier" {
+        c.JSON(http.StatusUnauthorized, Response{
+            Status:  "error",
+            Message: "Unauthorized",
+            Error:   "Only couriers can view their orders",
+        })
+        return
+    }
 
 	orders, ordererr := ctrl.orderService.GetAllOrdersByCourierID(uint(courierID))
 	if ordererr != nil {
@@ -275,8 +344,9 @@ func (ctrl *OrderController) GetAllOrders(c *gin.Context) {
 }
 
 func (ctrl *OrderController) AssignOrderToCourier(c *gin.Context) {
-
-	orderID, ordererr := strconv.ParseUint(c.Param("orderID"), 10, 32)
+	orderID, ordererr := strconv.ParseUint(c.Query("orderID"), 10, 32)
+    userID, userErr := strconv.ParseUint(c.Query("userID"), 10, 32)
+    courierID, courierErr := strconv.ParseUint(c.Query("courierID"), 10, 32)
 	if ordererr != nil {
 		c.JSON(http.StatusBadRequest, Response{
 			Status:  "error",
@@ -286,23 +356,60 @@ func (ctrl *OrderController) AssignOrderToCourier(c *gin.Context) {
 		return
 	}
 
-	var assignment struct {
-		CourierID  uint `json:"courier_id" binding:"required"`
-		AssignerID uint `json:"assigner_id" binding:"required"`
-	}
+    if userErr != nil {
+        c.JSON(http.StatusBadRequest, Response{
+            Status:  "error",
+            Message: "Invalid user ID",
+            Error:   userErr.Error(),
+        })
+        return
+    }
 
-	if ordererr := c.ShouldBindJSON(&assignment); ordererr != nil {
-		c.JSON(http.StatusBadRequest, Response{
-			Status:  "error",
-			Message: "Invalid courier ID",
-			Error:   ordererr.Error(),
-		})
-		return
-	}
+    if courierErr != nil {
+        c.JSON(http.StatusBadRequest, Response{
+            Status:  "error",
+            Message: "Invalid courier ID",
+            Error:   courierErr.Error(),
+        })
+        return
+    }
+
+
+	// var assignment struct {
+	// 	CourierID  uint `json:"courier_id" binding:"required"`
+	// 	AssignerID uint `json:"assigner_id" binding:"required"`
+	// }
+
+	// if ordererr := c.ShouldBindJSON(&assignment); ordererr != nil {
+	// 	c.JSON(http.StatusBadRequest, Response{
+	// 		Status:  "error",
+	// 		Message: "Invalid courier ID",
+	// 		Error:   ordererr.Error(),
+	// 	})
+	// 	return
+	// }
 
 	// check assigner role
+    user, userErr := ctrl.userService.GetUserByID(uint(userID))
+    if userErr != nil {
+        c.JSON(http.StatusNotFound, Response{
+            Status:  "error",
+            Message: "User not found",
+            Error:   userErr.Error(),
+        })
+        return
+    }
 
-	if ordererr := ctrl.orderService.AssignOrderToCourier(uint(orderID), assignment.CourierID, assignment.AssignerID); ordererr != nil {
+    if user.Role != "admin"  {
+        c.JSON(http.StatusUnauthorized, Response{
+            Status:  "error",
+            Message: "Unauthorized",
+            Error:   "Only admins can assign orders",
+        })
+        return
+    }
+
+	if ordererr := ctrl.orderService.AssignOrderToCourier(uint(orderID), uint(courierID), uint(userID)); ordererr != nil {
 		c.JSON(http.StatusInternalServerError, Response{
 			Status:  "error",
 			Message: "Failed to assign order to courier",

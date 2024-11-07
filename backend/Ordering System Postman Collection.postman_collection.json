@@ -28,7 +28,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/users/:id",
+							"raw": "http://localhost:8080/users/31",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -36,13 +36,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": ""
-								}
+								"31"
 							]
 						},
 						"description": "Gets information about the authenticated user."
@@ -206,29 +200,20 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/orders/customer/:customer_id",
+							"raw": "http://localhost:8080/order/customer?customerID=30",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"orders",
-								"customer",
-								":customer_id"
+								"order",
+								"customer"
 							],
 							"query": [
 								{
-									"key": "workspace",
-									"value": "{{workspaceId}}",
-									"description": "Optional. A workspace ID in which to create the collection.\n\nIf you do not include this query parameter, the system creates the collection in your \"My Workspace\" workspace.",
-									"disabled": true
-								}
-							],
-							"variable": [
-								{
-									"key": "customer_id",
-									"value": ""
+									"key": "customerID",
+									"value": "30"
 								}
 							]
 						},
@@ -647,20 +632,28 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/orders/:id",
+							"raw": "http://localhost:8080/order/delete?orderID=4&userID=30&courierID=31",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"orders",
-								":id"
+								"order",
+								"delete"
 							],
-							"variable": [
+							"query": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "orderID",
+									"value": "4"
+								},
+								{
+									"key": "userID",
+									"value": "30"
+								},
+								{
+									"key": "courierID",
+									"value": "31"
 								}
 							]
 						},
@@ -1312,21 +1305,20 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/orders/courier/:courier_id",
+							"raw": "http://localhost:8080/order/courier?courierID=31",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"orders",
-								"courier",
-								":courier_id"
+								"order",
+								"courier"
 							],
-							"variable": [
+							"query": [
 								{
-									"key": "courier_id",
-									"value": ""
+									"key": "courierID",
+									"value": "31"
 								}
 							]
 						}
@@ -1336,7 +1328,7 @@
 				{
 					"name": "Assign Order to Courier",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1348,21 +1340,28 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/orders/:id/assign",
+							"raw": "http://localhost:8080/order/assign?courierID=31&userID=32&orderID=4",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"orders",
-								":id",
+								"order",
 								"assign"
 							],
-							"variable": [
+							"query": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "courierID",
+									"value": "31"
+								},
+								{
+									"key": "userID",
+									"value": "32"
+								},
+								{
+									"key": "orderID",
+									"value": "4"
 								}
 							]
 						}

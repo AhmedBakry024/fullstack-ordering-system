@@ -1,31 +1,30 @@
 package services
 
 import (
-    "ordering-system/models"
-    "ordering-system/repositories"
+	"ordering-system/models"
+	"ordering-system/repositories"
 )
 
 type UserService interface {
-    GetUserByID(id uint) (*models.User, error)
-    CreateUser(user *models.User) error
-    GetUserByEmail(email string) (*models.User, error)
-    
+	GetUserByID(id uint) (*models.User, error)
+	CreateUser(user *models.User) error
+	GetUserByEmail(email string) (*models.User, error)
 }
 
 type userService struct {
-    repo repositories.UserRepository
+	repo repositories.UserRepository
 }
 
 func NewUserService(repo repositories.UserRepository) UserService {
-    return &userService{repo}
+	return &userService{repo}
 }
 
 func (s *userService) GetUserByID(id uint) (*models.User, error) {
-    return s.repo.FindByID(id)
+	return s.repo.FindByID(id)
 }
 
 func (s *userService) CreateUser(user *models.User) error {
-    return s.repo.Create(user)
+	return s.repo.Create(user)
 }
 
 func (s *userService) GetUserByEmail(email string) (*models.User, error) {
