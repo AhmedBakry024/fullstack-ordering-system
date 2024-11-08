@@ -1,5 +1,5 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { getAllOrdersByCustomerID, getAllOrders, bookItem } from '../services/apiService'; 
+import React, { useEffect, useState } from 'react';
+import { getAllOrdersByCustomerID, getAllOrders, createOrder } from '../services/apiService'; 
 import { useNavigate } from 'react-router-dom'; 
 import { FiLogOut, FiShoppingCart } from 'react-icons/fi'; 
 import { useAuth } from '../context/AuthContext';
@@ -8,12 +8,21 @@ const CustomerDashboard = () => {
   const [orders, setOrders] = useState([]); // Define orders state
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [pickupLocation, setPickupLocation] = useState('');
+  const [dropoffLocation, setDropoffLocation] = useState('');
+  const [packageDetails, setPackageDetails] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const {  userId, logout } = useAuth();
+  const { userId, logout } = useAuth();
 
   useEffect(() => {
+    if (!userId) {
+      navigate('/login');
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const [ordersData, itemsData] = await Promise.all([getAllOrdersByCustomerID(userId), getAllOrders()]);
@@ -27,19 +36,38 @@ const CustomerDashboard = () => {
     };
 
     fetchData();
-  }, [userId]);
+  }, [userId, navigate]);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  const handleBookItem = async (itemId) => {
+  const handleCreateOrder = async () => {
+    const orderData = {
+      customer_id: userId,
+      courier_id: 0,
+      pickup_location: pickupLocation,
+      dropoff_location: dropoffLocation,
+      package_details: packageDetails,
+      delivery_time: new Date().toISOString(),
+      items: [
+        {
+          id: selectedItem.id,
+          name: selectedItem.name,
+          quantity: quantity,
+          weight: selectedItem.weight,
+          price: selectedItem.price,
+        },
+      ],
+    };
+
     try {
-      await bookItem(itemId, userId);
-      alert('Item booked successfully!');
+      await createOrder(orderData);
+      alert('Order created successfully!');
+      setSelectedItem(null); // Close the modal
     } catch (err) {
-      alert('Failed to book item. Please try again.');
+      alert('Failed to create order. Please try again.');
     }
   };
 
@@ -120,12 +148,48 @@ const CustomerDashboard = () => {
                 <div className="bg-white rounded-lg p-6 max-w-md w-full">
                   <h3 className="text-2xl font-bold mb-4">{selectedItem.name}</h3>
                   <p className="text-gray-700 mb-6">{selectedItem.package_details}</p>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Quantity</label>
+                    <input
+                      type="number"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-lg"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Pickup Location</label>
+                    <input
+                      type="text"
+                      value={pickupLocation}
+                      onChange={(e) => setPickupLocation(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-lg"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Dropoff Location</label>
+                    <input
+                      type="text"
+                      value={dropoffLocation}
+                      onChange={(e) => setDropoffLocation(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-lg"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Package Details</label>
+                    <input
+                      type="text"
+                      value={packageDetails}
+                      onChange={(e) => setPackageDetails(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-lg"
+                    />
+                  </div>
                   <div className="flex justify-end space-x-4">
                     <button
                       className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-                      onClick={() => handleBookItem(selectedItem.id)}
+                      onClick={handleCreateOrder}
                     >
-                      Book This Item
+                      Create Order
                     </button>
                     <button
                       className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"
@@ -142,7 +206,7 @@ const CustomerDashboard = () => {
             <div className="mt-12">
               <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">List of Orders</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {orders.map(order => (
+                {orders && orders.map(order => (
                   <div
                     key={order.id}
                     className="bg-white p-4 border rounded-lg shadow hover:shadow-lg transition cursor-pointer"

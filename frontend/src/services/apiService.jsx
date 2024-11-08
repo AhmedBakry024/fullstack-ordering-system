@@ -87,20 +87,17 @@ export const updateOrderStatus = async (orderId, status) => {
     }
 };
 
-export const getAllOrdersByCustomerID = async (customerID) => {
+export const getAllOrdersByCustomerID = async (customerId) => {
     try {
-        const response = await axios.get('/order/customer', {
-            params: { customerID: customerID },
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return response.data;
+      const response = await fetch(`/api/orders/customer/${customerId}`);
+      const data = await response.json();
+      return Array.isArray(data) ? data : []; 
     } catch (error) {
-        console.error("Fetch customer orders error:", error.response || error.message);
-        throw new Error(error.response?.data?.message || "Failed to fetch customer orders");
+      console.error("Failed to fetch orders:", error);
+      return [];
     }
-};
+  };
+  
 export const getAllOrdersByCourierID = async (courierId) => {
     try {
         const response = await axios.get('/order/courier', {
