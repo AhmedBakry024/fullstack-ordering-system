@@ -46,7 +46,7 @@ const CustomerDashboard = () => {
   const handleCreateOrder = async () => {
     const orderData = {
       customer_id: userId,
-      courier_id: 0,
+      courier_id: null,
       pickup_location: pickupLocation,
       dropoff_location: dropoffLocation,
       package_details: packageDetails,
