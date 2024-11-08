@@ -5,19 +5,29 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [userId, setUserId] = useState(null);
+    const [userRole, setUserRole] = useState(null);
 
-    const login = (userData) => setUser(userData);
-    const logout = () => setUser(null);
+    const login = (userData) => {
+        setUser(userData);
+        setUserId(userData.id); // Assuming userData contains an id field
+        setUserRole(userData.role); // Assuming userData contains a role field
+    };
+
+    const logout = () => {
+        setUser(null);
+        setUserId(null);
+        setUserRole(null);
+    };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, userId, userRole, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
 };
 
 // Custom hook for accessing AuthContext
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) {

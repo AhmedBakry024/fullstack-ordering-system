@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllOrders, updateOrderStatus, deleteOrder, reassignOrder } from '../services/apiService';
+import { getAllOrders, updateOrderStatus, deleteOrder, assignOrderToCourier } from '../services/apiService';
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -44,7 +44,7 @@ const AdminDashboard = () => {
 
   const handleReassignOrder = async (orderId, newCourierId) => {
     try {
-      await reassignOrder(orderId, newCourierId);
+      await assignOrderToCourier(orderId, newCourierId);
       setOrders(orders.map(order =>
         order.id === orderId ? { ...order, courierId: newCourierId } : order
       ));
@@ -74,9 +74,9 @@ const AdminDashboard = () => {
           {orders.map(order => (
             <tr key={order.id}>
               <td>{order.id}</td>
-              <td>{order.customerName || 'N/A'}</td>
+              <td>{order.customer_name || 'N/A'}</td>
               <td>{order.status}</td>
-              <td>{order.courierId || 'N/A'}</td>
+              <td>{order.courier_id || 'N/A'}</td>
               <td>
                 <select
                   value={order.status}

@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { getUserOrders } from '../services/apiService';
+import { getAllOrdersByCustomerID } from '../services/apiService';
 import { useNavigate } from 'react-router-dom';
 import { FiLogOut, FiHome } from 'react-icons/fi';
+import { useAuth } from '../context/AuthContext';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { user, userId, userRole, logout } = useAuth();
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const ordersData = await getUserOrders();
+        const ordersData = await getAllOrdersByCustomerID(userId);
         setOrders(ordersData);
       } catch (err) {
         setError('Failed to fetch orders. Please try again later.');

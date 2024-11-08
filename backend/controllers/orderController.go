@@ -423,3 +423,60 @@ func (ctrl *OrderController) AssignOrderToCourier(c *gin.Context) {
 		Message: "Order assigned successfully",
 	})
 }
+
+
+// book order
+func (ctrl *OrderController) BookOrder(c *gin.Context) {
+	orderID, ordererr := strconv.ParseUint(c.Query("orderID"), 10, 32)
+	userID, userErr := strconv.ParseUint(c.Query("userID"), 10, 32)
+	if ordererr != nil {
+		c.JSON(http.StatusBadRequest, Response{
+			Status:  "error",
+			Message: "Invalid order ID",
+			Error:   ordererr.Error(),
+		})
+		return
+	}
+
+	if userErr != nil {
+		c.JSON(http.StatusBadRequest, Response{
+			Status:  "error",
+			Message: "Invalid user ID",
+			Error:   userErr.Error(),
+		})
+		return
+	}
+
+	user, userErr := ctrl.userService.GetUserByID(uint(userID))
+	if userErr != nil {
+		c.JSON(http.StatusNotFound, Response{
+			Status:  "error",
+			Message: "User not found",
+			Error:   userErr.Error(),
+		})
+		return
+	}
+
+	if user.Role != "customer" {
+		c.JSON(http.StatusUnauthorized, Response{
+			Status:  "error",
+			Message: "Unauthorized",
+			Error:   "Only customers can book orders",
+		})
+		return
+	}
+	
+	if ordererr := ctrl.orderService.BookOrder(uint(orderID), uint(userID)); ordererr != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Status:  "error",
+			Message: "Failed to book order",
+			Error:   ordererr.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, Response{
+		Status:  "success",
+		Message: "Order booked successfully",
+	})
+}

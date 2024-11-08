@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { getUserOrders, getAvailableItems, bookItem } from '../services/apiService'; 
+import React, { useEffect, useContext, useState } from 'react';
+import { getAllOrdersByCustomerID, getAllOrders, bookItem } from '../services/apiService'; 
 import { useNavigate } from 'react-router-dom'; 
 import { FiLogOut, FiShoppingCart } from 'react-icons/fi'; 
+import { useAuth } from '../context/AuthContext';
 
 const CustomerDashboard = () => {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState([]); // Define orders state
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const {  userId, logout } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [ordersData, itemsData] = await Promise.all([getUserOrders(), getAvailableItems()]);
-        setOrders(ordersData);
+        const [ordersData, itemsData] = await Promise.all([getAllOrdersByCustomerID(userId), getAllOrders()]);
+        setOrders(ordersData); // Set orders state
         setItems(itemsData);
       } catch (err) {
         setError('Failed to fetch data. Please try again later.');
@@ -25,16 +27,16 @@ const CustomerDashboard = () => {
     };
 
     fetchData();
-  }, []);
+  }, [userId]);
 
   const handleLogout = () => {
-    // Add logout logic here
+    logout();
     navigate('/login');
   };
 
   const handleBookItem = async (itemId) => {
     try {
-      await bookItem(itemId);
+      await bookItem(itemId, userId);
       alert('Item booked successfully!');
     } catch (err) {
       alert('Failed to book item. Please try again.');
@@ -176,4 +178,5 @@ const CustomerDashboard = () => {
     </div>
   );
 };
+
 export default CustomerDashboard;

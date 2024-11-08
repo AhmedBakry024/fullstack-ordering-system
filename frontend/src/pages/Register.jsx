@@ -1,8 +1,8 @@
-// src/pages/Register.js
 import React, { useState } from 'react';
 import { registerUser } from '../services/apiService';
 import InputField from '../components/InputField';
-import '../styles/Register.css';
+import Navbar from '../components/Navbar'; // Adjust the path as needed
+import '../styles/App.css';
 
 const Register = () => {
     const [name, setName] = useState('');

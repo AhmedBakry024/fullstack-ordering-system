@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAssignedOrders, updateOrderStatus } from '../services/apiService';
+import { getAllOrdersByCourierID, updateOrderStatus } from '../services/apiService';
 
 const CourierDashboard = () => {
     const [orders, setOrders] = useState([]);
@@ -9,7 +9,7 @@ const CourierDashboard = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const data = await getAssignedOrders();
+                const data = await getAllOrdersByCourierID();
                 setOrders(data);
             } catch (err) {
                 setError('Failed to fetch assigned orders.');

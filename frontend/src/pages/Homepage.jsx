@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { AuthContext } from "../context/AuthContext";
@@ -6,7 +6,19 @@ import { AuthContext } from "../context/AuthContext";
 const Homepage = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
-  const { user, logout } = useContext(AuthContext);
+  const { user, userRole, logout } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (userRole === "admin") {
+      navigate("/admin-dashboard");
+    }
+    else if (userRole === "courier") {
+      navigate("/courier-dashboard");
+    }
+    else if (userRole === "customer") {
+      navigate("/home-page");
+    }
+  }, [userRole, navigate]);
 
   const handleLogin = () => {
     navigate("/login");
