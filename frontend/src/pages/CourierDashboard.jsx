@@ -79,8 +79,8 @@ const CourierDashboard = () => {
                                 onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
                             >
                                 <option value="accepted">Accepted</option>
-                                <option value="picked up">Picked Up</option>
-                                <option value="in transit">In Transit</option>
+                                <option value="picked_up">Picked Up</option>
+                                <option value="in_transit">In Transit</option>
                                 <option value="delivered">Delivered</option>
                                 <option value="declined">Declined</option>
                             </select>

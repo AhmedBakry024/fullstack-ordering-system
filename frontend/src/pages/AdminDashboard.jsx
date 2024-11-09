@@ -57,7 +57,7 @@ const AdminDashboard = () => {
   if (loading) return <p>Loading all orders...</p>;
   if (error) return <p>{error}</p>;
 
-  const assignedOrders = orders.filter(order => order.courier_id !== 0);
+  const assignedOrders = orders.filter(order => order.courier_id !== null);
   const unassignedOrders = orders.filter(order => order.courier_id === null);
 
   return (

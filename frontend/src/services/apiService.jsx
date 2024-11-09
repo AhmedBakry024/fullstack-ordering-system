@@ -52,8 +52,8 @@ export const createOrder = async (orderData) => {
 
 export const getOrderById = async (orderId) => {
     try {
-        const response = await axios.get(`/order`, {
-            params: { id: orderId },
+        const response = await axios.get('/order', {
+            params: { orderID: orderId },
         });
         return response.data;
     } catch (error) {
@@ -62,10 +62,13 @@ export const getOrderById = async (orderId) => {
     }
 };
 
-export const deleteOrder = async (orderId) => {
+export const deleteOrder = async (orderID,userID) => {
     try {
         const response = await axios.delete('/order/delete', {
-            data: { id: orderId },
+            params: { 
+                orderID: orderID,
+                userID: userID,
+            },
         });
         return response.data;
     } catch (error) {
@@ -74,12 +77,14 @@ export const deleteOrder = async (orderId) => {
     }
 };
 
-export const updateOrderStatus = async (orderId,userId, status) => {
+export const updateOrderStatus = async (orderId, userId, status) => {
     try {
-        const response = await axios.put('/order/update', {
-            orderID: orderId,
-            userID: userId,
-            status: status,
+        const response = await axios.put('/order/update', null, {
+            params: {
+                orderID: orderId,
+                userID: userId,
+                status: status,
+            },
         });
         return response.data;
     } catch (error) {
@@ -90,16 +95,20 @@ export const updateOrderStatus = async (orderId,userId, status) => {
 
 export const getAllOrdersByCustomerID = async (customerId) => {
     try {
-      const response = await fetch(`/api/orders/customer/${customerId}`);
-      const data = await response.json();
-      return Array.isArray(data) ? data : []; 
+        const response = await axios.get('/order/customer', {
+            params: { customerID: customerId },
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
     } catch (error) {
-      console.error("Failed to fetch orders:", error);
-      return [];
+        console.error("Failed to fetch orders:", error.response || error.message);
+        throw new Error(error.response?.data?.message || "Failed to fetch orders");
     }
-  };
-  
-  export const getAllOrdersByCourierID = async (courierId) => {
+};
+
+export const getAllOrdersByCourierID = async (courierId) => {
     try {
         const response = await axios.get('/order/courier', {
             params: { courierID: courierId },
@@ -114,12 +123,13 @@ export const getAllOrdersByCustomerID = async (customerId) => {
     }
 };
 
-
 export const assignOrderToCourier = async (orderId, courierId) => {
     try {
-        const response = await axios.put('/order/assign', {
-            orderId,
-            courierId,
+        const response = await axios.put('/order/assign', null, {
+            params: {
+                orderId,
+                courierId,
+            },
         });
         return response.data;
     } catch (error) {
@@ -138,16 +148,32 @@ export const getAllOrders = async () => {
     }
 };
 
-//bookItem
-export const bookItem = async (itemId , userId) => {
+// bookItem
+export const bookItem = async (itemId, userId) => {
     try {
-        const response = await axios.put('/order/book', {
-            itemId,
-            userId,
+        const response = await axios.put('/order/book', null, {
+            params: {
+                itemId,
+                userId,
+            },
         });
         return response.data;
     } catch (error) {
         console.error("Book item error:", error.response || error.message);
         throw new Error(error.response?.data?.message || "Failed to book item");
+    }
+};
+
+
+export const getUserFromId = async (userId) => {
+    try {
+        if (!userId) {
+            throw new Error("User ID is required");
+        }
+        const response = await axios.get(`/users/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Get user error:", error.response || error.message);
+        throw new Error(error.response?.data?.message || "Failed to fetch user");
     }
 };
