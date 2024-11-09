@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { getAllOrders, updateOrderStatus, deleteOrder, assignOrderToCourier } from '../services/apiService';
+import { AuthContext } from "../context/AuthContext";
+
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user, userId, logout } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -44,7 +47,7 @@ const AdminDashboard = () => {
 
   const handleReassignOrder = async (orderId, newCourierId) => {
     try {
-      await assignOrderToCourier(orderId, newCourierId);
+      await assignOrderToCourier(orderId, newCourierId, userId);
       setOrders(orders.map(order =>
         order.id === orderId ? { ...order, courier_id: newCourierId } : order
       ));
@@ -57,8 +60,8 @@ const AdminDashboard = () => {
   if (loading) return <p>Loading all orders...</p>;
   if (error) return <p>{error}</p>;
 
-  const assignedOrders = orders.filter(order => order.courier_id !== null);
-  const unassignedOrders = orders.filter(order => order.courier_id === null);
+  const assignedOrders = orders.filter(order => order.courier_id !== 0);
+  const unassignedOrders = orders.filter(order => order.courier_id === 0);
 
   return (
     <div>

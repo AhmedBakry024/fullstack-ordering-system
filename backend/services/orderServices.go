@@ -16,6 +16,7 @@ type OrderService interface {
 	AssignOrderToCourier(orderID, courierID uint, assignerId uint) error
 	BookOrder(orderID, userID uint) error
 	DeclineOrder(orderID uint) error
+	GetAllCourierIDs() ([]uint, error)
 }
 
 type orderService struct {
@@ -64,4 +65,8 @@ func (s *orderService) BookOrder(orderID, userID uint) error {
 
 func (s *orderService) DeclineOrder(orderID uint) error {
 	return s.repo.DeclineOrder(orderID)
+}
+
+func (s *orderService) GetAllCourierIDs() ([]uint, error) {
+	return s.repo.GetAllCourierIDs()
 }

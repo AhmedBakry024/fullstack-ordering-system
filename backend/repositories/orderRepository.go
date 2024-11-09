@@ -16,6 +16,7 @@ type OrderRepository interface {
     AssignToCourier(orderID, courierID uint) error
     Book(orderID, userID uint) error
     DeclineOrder(orderID uint) error
+    GetAllCourierIDs() ([]uint, error)
 }
 
 type orderRepository struct {
@@ -80,4 +81,12 @@ func (r *orderRepository) Book(orderID, userID uint) error {
 
 func (r *orderRepository) DeclineOrder(orderID uint) error {
     return r.db.Model(&models.Order{}).Where("id = ?", orderID).Update("courier_id", 0).Error
+}
+
+func (r *orderRepository) GetAllCourierIDs() ([]uint, error) {
+    var ids []uint
+    if err := r.db.Model(&models.Order{}).Select("courier_id").Group("courier_id").Find(&ids).Error; err != nil {
+        return nil, err
+    }
+    return ids, nil
 }
