@@ -57,7 +57,6 @@ func (ctrl *OrderController) CreateOrder(c *gin.Context) {
 		return
 	}
 
-	// Validate required fields
 	if order.PickupLocation == "" || order.DropoffLocation == "" {
 		c.JSON(http.StatusBadRequest, Response{
 			Status:  "error",
@@ -105,7 +104,6 @@ func (ctrl *OrderController) DeleteOrder(c *gin.Context) {
 		return
 	}
 
-	// get the user by the user ID and check if the user is an admin
 	user, userErr := ctrl.userService.GetUserByID(uint(userID))
 	if userErr != nil {
 		c.JSON(http.StatusNotFound, Response{
@@ -116,7 +114,6 @@ func (ctrl *OrderController) DeleteOrder(c *gin.Context) {
 		return
 	}
 
-	// Check if order exists
 	order, ordererr := ctrl.orderService.GetOrderByID(uint(orderID))
 	if ordererr != nil {
 		c.JSON(http.StatusNotFound, Response{
@@ -176,7 +173,6 @@ func (ctrl *OrderController) UpdateOrderStatus(c *gin.Context) {
 		return
 	}
 
-	// get the user by the user ID and check if the user is an admin
 	user, userErr := ctrl.userService.GetUserByID(uint(userID))
 	if userErr != nil {
 		c.JSON(http.StatusNotFound, Response{
@@ -235,7 +231,6 @@ func (ctrl *OrderController) UpdateOrderStatus(c *gin.Context) {
 	})
 }
 
-// Helper function to validate status transitions
 func isValidStatusTransition(current, new string) bool {
 	transitions := map[string][]string{
 		"pending":    {"accepted", "cancelled"},
@@ -400,62 +395,6 @@ func (ctrl *OrderController) AssignOrderToCourier(c *gin.Context) {
 	c.JSON(http.StatusOK, Response{
 		Status:  "success",
 		Message: "Order assigned successfully",
-	})
-}
-
-// book order
-func (ctrl *OrderController) BookOrder(c *gin.Context) {
-	orderID, ordererr := strconv.ParseUint(c.Query("orderID"), 10, 32)
-	userID, userErr := strconv.ParseUint(c.Query("userID"), 10, 32)
-	if ordererr != nil {
-		c.JSON(http.StatusBadRequest, Response{
-			Status:  "error",
-			Message: "Invalid order ID",
-			Error:   ordererr.Error(),
-		})
-		return
-	}
-
-	if userErr != nil {
-		c.JSON(http.StatusBadRequest, Response{
-			Status:  "error",
-			Message: "Invalid user ID",
-			Error:   userErr.Error(),
-		})
-		return
-	}
-
-	user, userErr := ctrl.userService.GetUserByID(uint(userID))
-	if userErr != nil {
-		c.JSON(http.StatusNotFound, Response{
-			Status:  "error",
-			Message: "User not found",
-			Error:   userErr.Error(),
-		})
-		return
-	}
-
-	if user.Role != "customer" {
-		c.JSON(http.StatusUnauthorized, Response{
-			Status:  "error",
-			Message: "Unauthorized",
-			Error:   "Only customers can book orders",
-		})
-		return
-	}
-
-	if ordererr := ctrl.orderService.BookOrder(uint(orderID), uint(userID)); ordererr != nil {
-		c.JSON(http.StatusInternalServerError, Response{
-			Status:  "error",
-			Message: "Failed to book order",
-			Error:   ordererr.Error(),
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, Response{
-		Status:  "success",
-		Message: "Order booked successfully",
 	})
 }
 

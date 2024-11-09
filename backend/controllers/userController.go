@@ -71,7 +71,6 @@ func (ctrl *UserController) CreateUser(c *gin.Context) {
         return
     }
 
-    // check if the email is matching the email pattern
     if !isEmailValid(user.Email) {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email address"})
         return
@@ -130,8 +129,6 @@ func hashPassword(password string) string {
 }
 
 func isEmailValid(email string) bool {
-    // This is a very simple email validation using the checkmail package
-
     checkmail := checkmail.ValidateFormat(email)
     return checkmail == nil
      
