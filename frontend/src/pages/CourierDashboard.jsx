@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Truck, Check, X, AlertCircle } from 'lucide-react';
+import { Package, Truck, Check, X, AlertCircle, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getAllOrdersByCourierID, updateOrderStatus, declineOrder } from '../services/apiService';
+import { useNavigate } from 'react-router-dom';
 
 const OrderStatusBadge = ({ status }) => {
   const getStatusColor = (status) => {
@@ -27,8 +28,8 @@ const CourierDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { userId } = useAuth();
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const { userId,logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -78,6 +79,11 @@ const CourierDashboard = () => {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -93,12 +99,23 @@ const CourierDashboard = () => {
           <h1 className="text-3xl font-bold text-gray-900">Courier Dashboard</h1>
           <p className="text-gray-500 mt-1">Manage your assigned deliveries</p>
         </div>
+        <div className="flex items-center gap-6">
         <div className="flex items-center gap-4">
           <Truck className="h-6 w-6 text-blue-500" />
           <span className="text-sm font-medium">
             Active Orders: {orders.filter(o => !['delivered', 'declined'].includes(o.status)).length}
           </span>
         </div>
+        <button
+      onClick={handleLogout}
+      className="flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors"
+      title="Logout"
+    >
+      <LogOut className="h-6 w-6" />
+
+    </button>
+  </div>
+        
       </div>
 
       {error && (
