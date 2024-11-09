@@ -64,7 +64,7 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   const handleReassignOrder = async (orderId, newCourierId) => {
@@ -88,11 +88,11 @@ const AdminDashboard = () => {
   const unassignedOrders = orders.filter((order) => order.courier_id === 0);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="w-full bg-white shadow-sm p-6">
+      <div className="w-full bg-white dark:bg-gray-800 shadow-sm p-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+          <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
           <div className="flex items-center space-x-4">
             <button
               className="text-blue-600 hover:text-blue-800"
@@ -112,9 +112,9 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 ">
         {/* Assigned Orders */}
-        <Section title="Assigned Orders" orders={assignedOrders}>
+        <Section title={<span className="text-white">Assigned Orders</span>} orders={assignedOrders}>
           {assignedOrders.map((order) => (
             <OrderRow
               key={order.id}
@@ -129,7 +129,7 @@ const AdminDashboard = () => {
         </Section>
 
         {/* Unassigned Orders */}
-        <Section title="Unassigned Orders" orders={unassignedOrders}>
+        <Section title={<span className="text-white">Unassigned Orders</span>}  orders={unassignedOrders}>
           {unassignedOrders.map((order) => (
             <OrderRow
               key={order.id}

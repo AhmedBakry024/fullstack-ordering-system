@@ -81,28 +81,32 @@ const CourierDashboard = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+      <div className="min-h-screen dark:bg-gray-800">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="min-h-screen dark:bg-gray-800 relative">
+      <div className="relative z-10">
+      <div className="max-w-6xl mx-auto p-6  ">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Courier Dashboard</h1>
+          <h1 className="text-3xl font-bold text-white">Courier Dashboard</h1>
           <p className="text-gray-500 mt-1">Manage your assigned deliveries</p>
         </div>
         <div className="flex items-center gap-6">
         <div className="flex items-center gap-4">
           <Truck className="h-6 w-6 text-blue-500" />
-          <span className="text-sm font-medium">
+          <span className="text-sm font-medium text-white">
             Active Orders: {orders.filter(o => !['delivered', 'declined'].includes(o.status)).length}
           </span>
         </div>
@@ -199,6 +203,8 @@ const CourierDashboard = () => {
             </div>
           </div>
         ))}
+      </div>
+    </div>
       </div>
     </div>
   );

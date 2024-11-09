@@ -99,16 +99,16 @@ const CustomerDashboard = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Top Navigation Bar */}
-      <div className="w-full bg-white shadow-sm">
+      <div className="w-full bg-white dark:bg-gray-800 shadow-sm p-6">
         <div className="container mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-gray-800 flex-grow mr-8">
+            <h2 className="text-2xl font-bold text-white flex-grow mr-8">
               Welcome, {displayFirstName(userName)}!
             </h2>
             <div className="flex items-center space-x-6">
