@@ -53,14 +53,14 @@ const Homepage = () => {
           <div className="text-center">
             <h1 className="text-5xl font-extrabold lg:text-7xl 2xl:text-8xl">
               <span className="text-transparent bg-gradient-to-br bg-clip-text from-teal-500 via-indigo-500 to-sky-500 dark:from-teal-200 dark:via-indigo-300 dark:to-sky-500">
-                Coming
+                Shipment
               </span>
               <span className="text-transparent bg-gradient-to-tr bg-clip-text from-blue-500 via-pink-500 to-red-500 dark:from-sky-300 dark:via-pink-300 dark:to-red-500">
-                Soon
+                Corporate
               </span>
             </h1>
             <p className="max-w-3xl mx-auto mt-6 text-lg text-gray-700 dark:text-white md:text-xl">
-              Stay tuned for the rest of the website. You still can sign in or sign up.
+              Welcome to the best shipment service in the world. Login or register to get started.
             </p>
             <div className="mt-8 flex justify-center space-x-4">
               <button

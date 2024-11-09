@@ -524,37 +524,3 @@ func (ctrl *OrderController) DeclineOrder(c *gin.Context) {
 	})
 }
 
-func (ctrl *OrderController) GetAllCourierIDs(c *gin.Context) {
-	userID, userErr := strconv.Atoi(c.Query("userID"))
-	if userErr != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
-		return
-	}
-
-	user, userErr := ctrl.userService.GetUserByID(uint(userID))
-	if userErr != nil {
-		c.JSON(http.StatusNotFound, Response{
-			Status:  "error",
-			Message: "User not found",
-			Error:   userErr.Error(),
-		})
-		return
-	}
-
-	if user.Role != "admin" {
-		c.JSON(http.StatusUnauthorized, Response{
-			Status:  "error",
-			Message: "Unauthorized",
-			Error:   "Only admins can view all courier IDs",
-		})
-		return
-	}
-
-	courierIDs, err := ctrl.orderService.GetAllCourierIDs()
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "No courier IDs found"})
-		return
-	}
-
-	c.JSON(http.StatusOK, courierIDs)
-}

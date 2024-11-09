@@ -9,6 +9,7 @@ type UserRepository interface {
     FindByID(id uint) (*models.User, error)
     Create(user *models.User) error
     FindByEmail(email string) (*models.User, error)
+    GetAllCourierIDs() ([]uint, error)
 }
 
 type userRepository struct {
@@ -37,4 +38,12 @@ func (r *userRepository) FindByEmail(email string) (*models.User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (r *userRepository) GetAllCourierIDs() ([]uint, error) {
+    var ids []uint
+    if err := r.db.Model(&models.User{}).Where("role = ?", "courier").Pluck("id", &ids).Error; err != nil {
+        return nil, err
+    }
+    return ids, nil
 }

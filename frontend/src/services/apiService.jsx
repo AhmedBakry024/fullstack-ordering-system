@@ -62,14 +62,9 @@ export const getOrderById = async (orderId) => {
     }
 };
 
-export const deleteOrder = async (orderID,userID) => {
+export const deleteOrder = async (orderID, userID) => {
     try {
-        const response = await axios.delete('/order/delete', {
-            params: { 
-                orderID: orderID,
-                userID: userID,
-            },
-        });
+        const response = await axios.delete(`/order/delete?orderID=${orderID}&userID=${userID}`);
         return response.data;
     } catch (error) {
         console.error("Delete order error:", error.response || error.message);
@@ -83,7 +78,7 @@ export const updateOrderStatus = async (orderId, userId, status) => {
             params: {
                 orderID: orderId,
                 userID: userId,
-                status: status,
+                status: status
             },
         });
         return response.data;
@@ -195,3 +190,18 @@ export const declineOrder = async (orderId, userId) => {
         throw new Error(error.response?.data?.message || "Failed to decline order");
     }
 }
+
+export const getAllCouriers = async (userId) => {
+    try {
+        const response = await axios.get('/user/couriers', {
+            params: {
+                userID: userId,
+            },
+        }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Get all couriers error:", error.response || error.message);
+        throw new Error(error.response?.data?.message || "Failed to fetch all couriers");
+    }
+};

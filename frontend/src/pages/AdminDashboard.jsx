@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { getAllOrders, updateOrderStatus, deleteOrder, assignOrderToCourier } from '../services/apiService';
+import { getAllOrders, updateOrderStatus, deleteOrder, assignOrderToCourier, getAllCouriers } from '../services/apiService';
 import { AuthContext } from '../context/AuthContext';
 import { LogOut, Home, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
   const { userId, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [couriersId, setCouriersId] = useState([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -22,7 +23,19 @@ const AdminDashboard = () => {
         setLoading(false);
       }
     };
+
+    const fetchCouriers = async () => {
+      try {
+        const data = await getAllCouriers(userId);
+        setCouriersId(data);
+      } catch (err) {
+        setError('Failed to fetch all couriers.');
+      }
+    };
+
     fetchOrders();
+    fetchCouriers();
+  
   }, []);
 
   const handleStatusUpdate = async (orderId, newStatus) => {
@@ -41,7 +54,7 @@ const AdminDashboard = () => {
 
   const handleDeleteOrder = async (orderId) => {
     try {
-      await deleteOrder(orderId);
+      await deleteOrder(orderId, userId);
       setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
       alert(`Order #${orderId} deleted successfully.`);
     } catch (err) {
@@ -110,6 +123,7 @@ const AdminDashboard = () => {
               handleDeleteOrder={handleDeleteOrder}
               handleReassignOrder={handleReassignOrder}
               showCourier
+              couriersId={couriersId}
             />
           ))}
         </Section>
@@ -123,6 +137,7 @@ const AdminDashboard = () => {
               handleStatusUpdate={handleStatusUpdate}
               handleDeleteOrder={handleDeleteOrder}
               handleReassignOrder={handleReassignOrder}
+              couriersId={couriersId}
             />
           ))}
         </Section>
@@ -151,7 +166,7 @@ const Section = ({ title, orders, children }) => (
   </div>
 );
 
-const OrderRow = ({ order, handleStatusUpdate, handleDeleteOrder, handleReassignOrder, showCourier = false }) => (
+const OrderRow = ({ order, handleStatusUpdate, handleDeleteOrder, handleReassignOrder, showCourier = false, couriersId }) => (
   <tr className="border-b hover:bg-gray-50">
     <td className="py-2 px-4">{order.id}</td>
     <td className="py-2 px-4">{order.customer_name || 'N/A'}</td>
@@ -182,11 +197,11 @@ const OrderRow = ({ order, handleStatusUpdate, handleDeleteOrder, handleReassign
           className="border rounded px-2"
         >
           <option value="">Assign</option>
-          {[1, 2, 3, 4].map((id) => (
-            <option key={id} value={id}>
-              Courier #{id}
-            </option>
-          ))}
+          {
+                    couriersId.map(courierId => (
+                      <option key={courierId} value={courierId}>Courier {courierId}</option>
+                    ))
+                  }
         </select>
       </button>
     </td>
