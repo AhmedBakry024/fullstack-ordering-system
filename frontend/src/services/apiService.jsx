@@ -177,3 +177,20 @@ export const getUserFromId = async (userId) => {
         throw new Error(error.response?.data?.message || "Failed to fetch user");
     }
 };
+
+///order/decline
+
+export const declineOrder = async (orderId, userId) => {
+    try {
+        const response = await axios.put('/order/decline', null, {
+            params: {
+                orderID: orderId,
+                userID: userId,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Decline order error:", error.response || error.message);
+        throw new Error(error.response?.data?.message || "Failed to decline order");
+    }
+}
