@@ -9,7 +9,7 @@ const OrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [courierName, setCourierName] = useState('Not assigned'); 
+  const [courierName, setCourierName] = useState('Not assigned');
 
   const navigate = useNavigate();
   const { userId, logout } = useAuth();
@@ -69,7 +69,7 @@ const OrdersPage = () => {
     }
   };
 
- 
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -136,11 +136,11 @@ const OrdersPage = () => {
               <p><strong>Delivery Time:</strong> {new Date(selectedOrder.delivery_time).toLocaleString()}</p>
 
               {/* Add null check for items array */}
-              {selectedOrder.items && selectedOrder.items.length > 0 && (
+              {selectedOrder.order_items && selectedOrder.order_items.length > 0 && (
                 <>
                   <h4 className="text-lg font-semibold mt-4">Items:</h4>
                   <ul className="list-disc list-inside">
-                    {selectedOrder.items.map(item => (
+                    {selectedOrder.order_items.map(item => (
                       <li key={item.id}>
                         {item.name} - Quantity: {item.quantity}, Price: ${item.price}
                       </li>
