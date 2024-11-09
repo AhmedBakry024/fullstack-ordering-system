@@ -32,4 +32,5 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 	r.GET("/order/all", orderController.GetAllOrders)
 	r.PUT("/order/assign", orderController.AssignOrderToCourier)
 	r.PUT("/order/book", orderController.BookOrder)
+	r.PUT("/order/decline", orderController.DeclineOrder)
 }

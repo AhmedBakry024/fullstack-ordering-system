@@ -79,5 +79,5 @@ func (r *orderRepository) Book(orderID, userID uint) error {
 }
 
 func (r *orderRepository) DeclineOrder(orderID uint) error {
-    return r.db.Model(&models.Order{}).Where("id = ?", orderID).Update("courier_id", nil).Error
+    return r.db.Model(&models.Order{}).Where("id = ?", orderID).Update("courier_id", 0).Error
 }
