@@ -123,12 +123,13 @@ export const getAllOrdersByCourierID = async (courierId) => {
     }
 };
 
-export const assignOrderToCourier = async (orderId, courierId) => {
+export const assignOrderToCourier = async (orderId, courierId, userId) => {
     try {
         const response = await axios.put('/order/assign', null, {
             params: {
-                orderId,
-                courierId,
+                orderID: orderId,
+                courierID: courierId,
+                userID: userId
             },
         });
         return response.data;
