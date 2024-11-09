@@ -78,7 +78,7 @@ const CustomerDashboard = () => {
       pickup_location: formData.pickupLocation,
       dropoff_location: formData.dropoffLocation,
       package_details: formData.packageDetails,
-      OrderItems: items.map(item => ({
+      order_items: items.map(item => ({
         name: item.name,
         price: parseFloat(item.price),
         quantity: parseInt(item.quantity),
