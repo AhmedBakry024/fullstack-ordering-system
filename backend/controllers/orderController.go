@@ -480,3 +480,68 @@ func (ctrl *OrderController) BookOrder(c *gin.Context) {
 		Message: "Order booked successfully",
 	})
 }
+
+func (ctrl *OrderController) DeclineOrder(c *gin.Context) {
+	orderID, ordererr := strconv.ParseUint(c.Query("orderID"), 10, 32)
+	userID, userErr := strconv.ParseUint(c.Query("userID"), 10, 32)
+	if ordererr != nil {
+		c.JSON(http.StatusBadRequest, Response{
+			Status:  "error",
+			Message: "Invalid order ID",
+			Error:   ordererr.Error(),
+		})
+		return
+	}
+
+	if userErr != nil {
+		c.JSON(http.StatusBadRequest, Response{
+			Status:  "error",
+			Message: "Invalid user ID",
+			Error:   userErr.Error(),
+		})
+		return
+	}
+
+	user, userErr := ctrl.userService.GetUserByID(uint(userID))
+	if userErr != nil {
+		c.JSON(http.StatusNotFound, Response{
+			Status:  "error",
+			Message: "User not found",
+			Error:   userErr.Error(),
+		})
+		return
+	}
+
+	order, ordererr := ctrl.orderService.GetOrderByID(uint(orderID))
+	if ordererr != nil {
+		c.JSON(http.StatusNotFound, Response{
+			Status:  "error",
+			Message: "Order not found",
+			Error:   ordererr.Error(),
+		})
+		return
+	}
+
+	if order.CourierID != user.ID {
+		c.JSON(http.StatusUnauthorized, Response{
+			Status:  "error",
+			Message: "Unauthorized",
+			Error:   "Only the assigned courier can decline the order",
+		})
+		return
+	}
+
+	if ordererr := ctrl.orderService.DeclineOrder(uint(orderID)); ordererr != nil {
+		c.JSON(http.StatusInternalServerError, Response{
+			Status:  "error",
+			Message: "Failed to decline order",
+			Error:   ordererr.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, Response{
+		Status:  "success",
+		Message: "Order declined successfully",
+	})
+}

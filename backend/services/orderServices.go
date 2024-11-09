@@ -15,6 +15,7 @@ type OrderService interface {
 	GetAllOrders() ([]models.Order, error)
 	AssignOrderToCourier(orderID, courierID uint, assignerId uint) error
 	BookOrder(orderID, userID uint) error
+	DeclineOrder(orderID uint) error
 }
 
 type orderService struct {
@@ -60,3 +61,7 @@ func (s *orderService) AssignOrderToCourier(orderID, courierID uint, assignerId 
 func (s *orderService) BookOrder(orderID, userID uint) error {
 	return s.repo.Book(orderID, userID)
 }	
+
+func (s *orderService) DeclineOrder(orderID uint) error {
+	return s.repo.DeclineOrder(orderID)
+}

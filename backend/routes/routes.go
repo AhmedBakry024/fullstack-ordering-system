@@ -17,13 +17,11 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 	orderRepo := repositories.NewOrderRepository(db)
 	orderService := services.NewOrderService(orderRepo)
 	orderController := controllers.NewOrderController(orderService, userService)
-	adminController := controllers.NewAdminController(orderService)
 
-	// Define routes
 	r.GET("/users/:id", userController.GetUserByID)
 	r.POST("/users", userController.CreateUser)
 	r.GET("/users/login", userController.LoginUser)
-	// admin := r.Group("/admin")
+	
 
 	r.POST("/order/create", orderController.CreateOrder)
 	r.GET("/order", orderController.GetOrderByID)
@@ -32,7 +30,6 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 	r.GET("/order/customer", orderController.GetAllOrdersByCustomerID)
 	r.GET("/order/courier", orderController.GetAllOrdersByCourierID)
 	r.GET("/order/all", orderController.GetAllOrders)
-	r.GET("/orders", adminController.GetAllOrders)
 	r.PUT("/order/assign", orderController.AssignOrderToCourier)
 	r.PUT("/order/book", orderController.BookOrder)
 }
