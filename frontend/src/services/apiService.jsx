@@ -74,11 +74,12 @@ export const deleteOrder = async (orderId) => {
     }
 };
 
-export const updateOrderStatus = async (orderId, status) => {
+export const updateOrderStatus = async (orderId,userId, status) => {
     try {
         const response = await axios.put('/order/update', {
-            id: orderId,
-            status,
+            orderID: orderId,
+            userID: userId,
+            status: status,
         });
         return response.data;
     } catch (error) {
@@ -98,10 +99,13 @@ export const getAllOrdersByCustomerID = async (customerId) => {
     }
   };
   
-export const getAllOrdersByCourierID = async (courierId) => {
+  export const getAllOrdersByCourierID = async (courierId) => {
     try {
         const response = await axios.get('/order/courier', {
-            params: { courierId },
+            params: { courierID: courierId },
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
         return response.data;
     } catch (error) {
@@ -109,6 +113,7 @@ export const getAllOrdersByCourierID = async (courierId) => {
         throw new Error(error.response?.data?.message || "Failed to fetch courier orders");
     }
 };
+
 
 export const assignOrderToCourier = async (orderId, courierId) => {
     try {
