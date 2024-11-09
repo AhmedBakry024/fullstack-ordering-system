@@ -70,7 +70,6 @@ const CustomerDashboard = () => {
     setLoading(true);
 
     const orderData = {
-      courier_id: 32,
       customer_id: userId,
       customer_name: userName,
       customer_phone: user?.phone || '',
