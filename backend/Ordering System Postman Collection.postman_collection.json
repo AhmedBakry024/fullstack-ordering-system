@@ -28,7 +28,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/users/31",
+							"raw": "http://localhost:8080/users/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -36,7 +36,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"31"
+								"3"
 							]
 						},
 						"description": "Gets information about the authenticated user."
@@ -120,7 +120,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Jane Doe\",\r\n  \"email\": \"jane.doe@example.com\",\r\n  \"phone\": \"9876543210\",\r\n  \"password\": \"securepassword\",\r\n  \"role\": \"customer\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Customer\",\r\n  \"email\": \"test@example.com\",\r\n  \"phone\": \"9876543210\",\r\n  \"password\": \"Hello123#\",\r\n  \"role\": \"customer\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -147,7 +147,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/users/login?email=jane.doe@example.com&password=securepassword",
+							"raw": "http://localhost:8080/users/login?email=jane.doe@example.com&password=Hello123%23",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -164,7 +164,33 @@
 								},
 								{
 									"key": "password",
-									"value": "securepassword"
+									"value": "Hello123#"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Courier IDs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/couriers?userID=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"couriers"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "2"
 								}
 							]
 						}
@@ -200,7 +226,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/order/customer?customerID=30",
+							"raw": "http://localhost:8080/order/customer?customerID=1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -213,7 +239,7 @@
 							"query": [
 								{
 									"key": "customerID",
-									"value": "30"
+									"value": "1"
 								}
 							]
 						},
@@ -461,7 +487,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/order?orderID=5",
+							"raw": "http://localhost:8080/order?orderID=28",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -473,7 +499,7 @@
 							"query": [
 								{
 									"key": "orderID",
-									"value": "5"
+									"value": "28"
 								}
 							]
 						},
@@ -629,7 +655,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/order/delete?orderID=5&userID=30&courierID=31",
+							"raw": "http://localhost:8080/order/delete?orderID=28&userID=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -642,15 +668,11 @@
 							"query": [
 								{
 									"key": "orderID",
-									"value": "5"
+									"value": "28"
 								},
 								{
 									"key": "userID",
-									"value": "30"
-								},
-								{
-									"key": "courierID",
-									"value": "31"
+									"value": "2"
 								}
 							]
 						},
@@ -792,7 +814,7 @@
 							"raw": "{\n  \"status\": \"in_transit\"\n}\n"
 						},
 						"url": {
-							"raw": "http://localhost:8080/order/update?orderID=5&userID=31&status=accepted",
+							"raw": "http://localhost:8080/order/update?orderID=28&userID=3&status=accepted",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -805,11 +827,11 @@
 							"query": [
 								{
 									"key": "orderID",
-									"value": "5"
+									"value": "28"
 								},
 								{
 									"key": "userID",
-									"value": "31"
+									"value": "3"
 								},
 								{
 									"key": "status",
@@ -1139,7 +1161,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"courier_id\": 31,\r\n  \"customer_id\": 30,\r\n  \"customer_name\": \"John Doe\",\r\n  \"customer_phone\": \"1234567890\",\r\n  \"total_price\": 50.0,\r\n  \"pickup_location\": \"Location A\",\r\n  \"dropoff_location\": \"Location B\",\r\n  \"package_details\": \"Small box\",\r\n  \"OrderItems\":[\r\n    {\r\n        \"name\": \"Item 1\",\r\n        \"price\": 35.0,\r\n        \"quantity\": 3,\r\n        \"weight\":250.5\r\n    }\r\n  ]\r\n}\r\n",
+							"raw": "{\r\n  \"customer_id\": 1,\r\n  \"customer_name\": \"John Doe\",\r\n  \"customer_phone\": \"1234567890\",\r\n  \"total_price\": 50.0,\r\n  \"pickup_location\": \"Location A\",\r\n  \"dropoff_location\": \"Location B\",\r\n  \"package_details\": \"Small box\",\r\n  \"order_items\":[\r\n    {\r\n        \"name\": \"Item 1\",\r\n        \"price\": 35.0,\r\n        \"quantity\": 3,\r\n        \"weight\":250.5\r\n    },\r\n    {\r\n        \"name\": \"Item 2\",\r\n        \"price\": 35.0,\r\n        \"quantity\": 3,\r\n        \"weight\":250.5\r\n    }\r\n  ]\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1156,14 +1178,6 @@
 							"path": [
 								"order",
 								"create"
-							],
-							"query": [
-								{
-									"key": "workspace",
-									"value": "{{workspaceId}}",
-									"description": "Optional. A workspace ID.",
-									"disabled": true
-								}
 							]
 						},
 						"description": "Gets all of your [collections](https://www.getpostman.com/docs/collections). The response includes all of your subscribed collections."
@@ -1302,7 +1316,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/order/courier?courierID=31",
+							"raw": "http://localhost:8080/order/courier?courierID=3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1315,7 +1329,7 @@
 							"query": [
 								{
 									"key": "courierID",
-									"value": "31"
+									"value": "3"
 								}
 							]
 						}
@@ -1337,7 +1351,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/order/assign?courierID=31&userID=32&orderID=5",
+							"raw": "http://localhost:8080/order/assign?courierID=3&userID=2&orderID=28",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1350,15 +1364,65 @@
 							"query": [
 								{
 									"key": "courierID",
-									"value": "31"
+									"value": "3"
 								},
 								{
 									"key": "userID",
-									"value": "32"
+									"value": "2"
 								},
 								{
 									"key": "orderID",
-									"value": "5"
+									"value": "28"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Decline Order",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order/decline?orderID=28&userID=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"decline"
+							],
+							"query": [
+								{
+									"key": "orderID",
+									"value": "28"
+								},
+								{
+									"key": "userID",
+									"value": "3"
 								}
 							]
 						}
