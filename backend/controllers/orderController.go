@@ -231,7 +231,7 @@ func (ctrl *OrderController) UpdateOrderStatus(c *gin.Context) {
 	})
 }
 
-func isValidStatusTransition(current, new string) bool {
+	func isValidStatusTransition(current, new string) bool {
 	transitions := map[string][]string{
 		"pending":    {"accepted", "cancelled"},
 		"accepted":   {"picked_up", "cancelled"},

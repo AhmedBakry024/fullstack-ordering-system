@@ -1,0 +1,17 @@
+Create Network:
+podman network create go-fullstack
+
+Create Volume:
+podman volume create ordering-db
+
+Database:
+podman build -t localhost/react_orders_database ./database
+podman run --name database --network go-fullstack -v ordering-db:/var/lib/mysql -d localhost/react_orders_database:latest
+
+Backend:
+podman build -t localhost/react_orders_backend ./backend
+podman run --name backend -p 8080:8080 --network go-fullstack -d localhost/react_orders_backend:latest
+
+Frontend:
+podman build -t localhost/react_orders_frontend ./frontend
+podman run --name frontend -p 5173:5173 --network go-fullstack -d localhost/react_orders_frontend:latest
