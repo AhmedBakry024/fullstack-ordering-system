@@ -17,6 +17,8 @@ RUN npm install
 
 COPY . .
 
+RUN chown -R appuser:appgroup /app
+
 EXPOSE 5173
 
 CMD [ "npm", "run", "dev" ]
