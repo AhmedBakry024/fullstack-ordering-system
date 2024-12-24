@@ -33,3 +33,5 @@ CREATE TABLE `orders` (
     CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+
+SET FOREIGN_KEY_CHECKS=0;
