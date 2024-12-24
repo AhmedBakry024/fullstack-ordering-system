@@ -9,11 +9,8 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy the rest of the application code as root user
-COPY . .
-
-# Change ownership of the /app directory to the non-root user
-RUN chown -R appuser:appgroup /app
+# Copy the rest of the application code and change ownership to the non-root user
+COPY --chown=appuser:appgroup . .
 
 # Switch to the non-root user
 USER appuser
